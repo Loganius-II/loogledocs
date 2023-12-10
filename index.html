@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Doc</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="loogleDocs.png">
+</head>
+<body onload="check()">
+    <div id="opacity" class="opacity">
+        <div id="box" class="box">
+
+        </div>
+    </div>
+    <div id="box2" class="box2">
+      <button id="closeit" class="button1"><ion-icon class="close" name="close-circle-outline"></ion-icon></button>
+      <ion-icon class="red" name="warning-outline"></ion-icon>
+      <h1><span class="red">Disclaimer:</span></h1>
+      <hr>
+      <p>Do NOT put any personal information on this!</p>
+      <p>This website is vulnerable to hackers and should not be used for storing personal information such as, but not limited to: Passwords, names, ages, social security, zip code, credit or debit card information, etc. </p>
+      <p>No personal information is stored on our end, and not accessable by the developer (Logan McDermott). Please feel free to contact me if you have any questions.</p>
+      <footer>1loganmcd@gmail.com</footer>
+    </div>
+    <div class="topbar">
+      <img src="loogleDocs.png" alt="" class="logo">
+    <h4 id="draggable">Document Name: </h4>
+
+    <input type="text" class="nameDocInp" id="nameDoc" autocomplete="off">
+    <div id="printer" class="print">
+      <ion-icon id="delete" class="printerIcon" name="trash-outline"></ion-icon>
+    <ion-icon title="This prints the document (as raw text)" class="printerIcon" name="print" onclick="printDiv('printableArea1')"></ion-icon> 
+    <a><ion-icon title="Save all" id="outlineSaveIcon1" onclick="saveIt()" class="printerIcon" name="save-outline"></ion-icon></a>
+
+    <a title="Need help?" href="#helpDisplay"><ion-icon name="help-circle-outline" class="printerIcon"></ion-icon></a>
+    <img title="alignment option" id="alignmentOption" src="left-text-alignment-option.png" class="wow" alt="">
+    <ion-icon id="spellcheck" name="checkmark-circle" class="printerIcon" title="Print not as raw text (Defaulted)"></ion-icon>
+    <ion-icon id="waterMark" name="checkmark-circle" class="printerIcon" title="Water mark? Water mark; on selected by default"></ion-icon>
+    <select name="font" id="font" title="Font">
+      <option value="system-ui">System-ui</option>
+      <option value="poppins">Poppins</option>
+      <option value="sans-serif">Sans-Serif</option>
+      <option value="comic-sans">Comic-Sans</option>
+    </select>
+
+    <p id="saving"></p>
+    <div id="helpDisplay" class="helpDisplay">
+        <a class="closeBtn" href="#">&times;</a>
+        <h1 style="text-align: center;">HELP</h1>
+        <ion-icon name="print"></ion-icon> ------------------------ Prints saved Document *Reload Screen to get most up to date print
+        <br><ion-icon  name="save-outline"></ion-icon> ------------------------ Saves Document <br>*Click off of the text after typing, the top of the screen will say "Saving", then "Saved" be sure to press this save button to ensure consistent saving
+        <br><ion-icon  name="save"></ion-icon> ------------------------ Means the document saved! <br>
+        <ion-icon  name="checkmark-circle"></ion-icon> ------------------------ When you print/save it as pdf, the text will print extactly as shown on document <br>
+        <ion-icon  name="checkmark-circle-outline"></ion-icon> ------------------------ The text will print/be saved as pdf with raw text (alignment options won't be accounted for either)
+
+      
+    </div>
+</div>
+
+</div>
+
+<div id="printableArea1">
+    <textarea  id="textarea" cols="55" rows="10"></textarea>
+    <img src="loogleDocs.png" alt="" id="realWaterMark" class="logo1">
+</div>
+
+
+    <script>
+      function spellCheck(){
+        document.getElementById("spellcheck").addEventListener('click', () =>{
+          document.getElementById("spellcheck").name = 'checkmark-circle-outline';
+          document.getElementById("textarea").spellcheck = "false";
+          document.getElementById("spellcheck").addEventListener('click', () => {
+            document.getElementById("spellcheck").name = 'checkmark-circle';
+            document.getElementById("textarea").spellcheck = "true";
+              spellCheck();
+          })
+        })
+      }
+      spellCheck()
+      //start
+      function Watermark1(){
+        document.getElementById("waterMark").addEventListener('click', () =>{
+          document.getElementById("waterMark").name = 'checkmark-circle-outline';
+          document.getElementById("realWaterMark").style.visibility = "hidden";
+          document.getElementById("waterMark").addEventListener('click', () => {
+            document.getElementById("waterMark").name = 'checkmark-circle';
+            document.getElementById("realWaterMark").style.visibility = "visible";
+              Watermark1();
+          })
+        })
+      }
+      Watermark1();
+      //end
+      document.getElementById("delete").addEventListener('click', ()=> {
+        localStorage.clear()
+        document.getElementById("textarea").value = "";
+      })
+      document.getElementById("closeit").addEventListener('click', ()=>{
+        document.getElementById("opacity").style.transform = "scale(0.0)" ;
+        document.getElementById("box").style.transform = "scale(0.0)";
+        document.getElementById("box2").style.transform = "scale(0.0)";
+      })
+      document.getElementById("font").addEventListener('click', () => {
+        if(document.getElementById("font").value == 'system-ui'){
+          document.getElementById("textarea").style.fontFamily = "system-ui"
+      }
+        else if(document.getElementById("font").value == 'sans-serif'){
+          document.getElementById("textarea").style.fontFamily = "sans-serif";
+        }
+        else if(document.getElementById("font").value == 'poppins'){
+          document.getElementById("textarea").style.fontFamily = "Poppins";
+        }
+        else if(document.getElementById("font").value == 'comic-sans'){
+          document.getElementById("textarea").style.fontFamily = "cursive";
+        }
+      })
+
+        // Make the DIV element draggable:
+dragElement(document.getElementById("helpDisplay"));
+
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "header")) {
+    // if present, the header is where you move the DIV from:
+    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+  } else {
+    // otherwise, move the DIV from anywhere inside the DIV:
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+//CODE ABOVE COPY AND PASTED => W3 SCHOOLS
+        function saveIt(){
+          var textHTML = document.getElementById("textarea").value;
+          localStorage.setItem("document", textHTML);
+          document.getElementById("outlineSaveIcon1").name = "save"
+
+
+        }
+        // sleep time expects milliseconds
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+        document.getElementById("textarea").addEventListener("change", () =>{
+            document.getElementById("saving").innerHTML = "Saving...";
+        
+            sleep(500).then(() => {
+                document.getElementById("saving").innerHTML = "Saved";
+                localStorage.setItem("document", document.getElementById("textarea").innerHTML);
+});
+
+
+        })
+        //Change alignment
+
+        function restart(){
+        const button = document.getElementById("alignmentOption");
+        let index = 0
+        button.addEventListener('click', ()=>{
+          index=1
+          button.src = "right-text-alignment.png";
+          document.getElementById("textarea").style.textAlign = 'right';
+          button.addEventListener('click', ()=>{
+            button.src = "left-text-alignment-option.png";
+            document.getElementById("textarea").style.textAlign = 'left';
+            button.addEventListener('click', ()=>{
+              button.src = "format.png";
+              document.getElementById("textarea").style.textAlign = 'center';
+              if(1==1){
+              restart();
+            }
+            })
+            
+          })
+          
+        })
+      }
+      restart();
+
+
+    
+        //End Change Alignment
+
+        document.getElementById("nameDoc").addEventListener("change", () =>{
+            
+            var docName = document.getElementById("nameDoc").value;
+            localStorage.setItem("docName", docName);
+            document.title = docName;
+            if(docName == ""){
+              document.title = "New Doc";
+            }
+        })
+        function check(){
+            
+            document.getElementById("textarea").innerHTML = localStorage.getItem("document");
+            if(localStorage.getItem("docName") == null){
+                document.title = "New Doc";
+  
+            }
+            else{
+                document.title = localStorage.getItem("docName")
+                document.getElementById("textarea").innerHTML = localStorage.getItem("document");
+            }
+            }
+
+        function printDiv(divId) {
+//textarea
+            var textHTML = document.getElementById("textarea").value;
+            var printContents = document.getElementById(divId).innerHTML;
+            var originalContents = document.body.innerHTML;
+//          localStorage.setItem("document", textHTML);
+          if(document.getElementById("spellcheck").name == 'checkmark-circle'){
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+          }
+          else{
+            document.body.innerHTML = textHTML;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+          }
+}
+    </script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
